@@ -3,6 +3,7 @@ import uwaLogo from "@/assets/UWA.jpg";
 import accentureLogo from "@/assets/accenture.png";
 import norwoodLogo from "@/assets/norwood.png";
 import isroLogo from "@/assets/isro.png";
+import modoMioLogo from "@/assets/ModoMio.jpeg";
 
 const experiences = [
   {
@@ -70,7 +71,7 @@ const experiences = [
     title: "Research Analyst — Intern",
     company: "Indian Space Research Organisation (ISRO)",
     location: "Nagpur, India",
-    period: "July 2020 - Aug 2020",
+    period: "July 2020",
     image: isroLogo,
     alt: "ISRO logo",
     description:
@@ -203,6 +204,73 @@ const ExperienceSection = () => {
             ))}
           </div>
         </div>
+        {/* Additional Experience */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="mt-20"
+        >
+          <p className="text-primary text-sm tracking-[0.3em] uppercase mb-2">
+            Additional Experience
+          </p>
+          <h2 className="font-display text-4xl md:text-6xl tracking-wider text-foreground mb-10">
+            Beyond Data
+          </h2>
+
+          <div className="glass-card group overflow-hidden rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-primary/5">
+            <div className="flex flex-col md:flex-row">
+              {/* Logo tile */}
+              <div className="flex items-center justify-center h-48 md:h-auto md:w-64 lg:w-72 shrink-0 bg-white px-8 py-8 rounded-t-xl md:rounded-t-none md:rounded-l-xl">
+                <img
+                  src={modoMioLogo}
+                  alt="Crown Resorts logo"
+                  className="max-h-24 md:max-h-28 lg:max-h-32 max-w-full w-auto object-contain"
+                />
+              </div>
+
+              {/* Text content */}
+              <div className="flex-1 p-5 md:p-6 lg:p-8 flex flex-col justify-center">
+                <h3 className="font-display text-xl md:text-2xl lg:text-3xl tracking-wider text-foreground leading-tight">
+                  Crown Resorts
+                </h3>
+                <p className="text-xs text-muted-foreground mt-1 md:hidden">
+                  2024 – Present
+                </p>
+
+                {/* Hover reveal */}
+                <div className="max-h-0 overflow-hidden opacity-0 transition-all duration-500 ease-in-out group-hover:max-h-[1200px] group-hover:opacity-100 group-hover:mt-3">
+                  <p className="text-primary text-sm font-medium mb-1">
+                    Sommelier / Waitperson — Part Time
+                  </p>
+                  <p className="text-xs text-muted-foreground mb-3">
+                    Perth, Australia · 2024 – Present
+                  </p>
+
+                  <ul className="space-y-2">
+                    <li className="text-muted-foreground text-sm flex gap-2">
+                      <span className="text-primary mt-1 shrink-0">▸</span>
+                      Deliver high-quality customer service in a fast-paced hospitality environment, consistently maintaining professionalism during peak service periods
+                    </li>
+                    <li className="text-muted-foreground text-sm flex gap-2">
+                      <span className="text-primary mt-1 shrink-0">▸</span>
+                      Develop strong communication and interpersonal skills through daily interaction with diverse customers and team members
+                    </li>
+                    <li className="text-muted-foreground text-sm flex gap-2">
+                      <span className="text-primary mt-1 shrink-0">▸</span>
+                      Collaborate effectively within a team to support smooth operations and service efficiency
+                    </li>
+                    <li className="text-muted-foreground text-sm flex gap-2">
+                      <span className="text-primary mt-1 shrink-0">★</span>
+                      Recommended by management to complete the WSET Level 2 Award in Wines, achieving Pass with Merit and strengthening expertise in wine knowledge and service
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </motion.div>
       </div>
     </section>
   );
