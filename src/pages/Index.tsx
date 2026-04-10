@@ -7,10 +7,12 @@ import ProjectsSection from "@/components/ProjectsSection";
 import AchievementsSection from "@/components/AchievementsSection";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
+import GlobalBubble from "@/components/GlobalBubble";
 
 const Index = () => {
   return (
     <div className="min-h-screen bg-background">
+      <GlobalBubble />
       <Navbar />
       <HeroSection />
       <AboutSection />

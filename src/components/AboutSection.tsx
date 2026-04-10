@@ -16,7 +16,7 @@ const AboutSection = () => {
             Data Analyst Ready to Make an Impact
           </h2>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-            <div className="text-muted-foreground leading-relaxed space-y-4 text-sm md:text-base">
+            <div className="text-muted-foreground leading-relaxed space-y-4 text-base md:text-lg">
               <p>
                 I'm Adwait Reddy, a data professional based in Perth, Australia with a Master's in Data Science 
                 from the University of Western Australia. My journey spans consulting at Accenture, research at UWA, 
