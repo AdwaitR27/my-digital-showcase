@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Linkedin } from "lucide-react";
+import { LinkedinIcon } from "lucide-react";
 
 const AboutSection = () => {
   return (
