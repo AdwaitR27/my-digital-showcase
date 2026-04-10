@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Mail, Phone, MapPin, LinkedinIcon } from "lucide-react";
+import { Mail, Phone, MapPin, ExternalLink } from "lucide-react";
 
 const ContactSection = () => {
   return (
@@ -24,7 +24,7 @@ const ContactSection = () => {
               { icon: Mail, label: "Email", value: "arwork860@gmail.com", href: "mailto:arwork860@gmail.com" },
               { icon: Phone, label: "Phone", value: "0478 883 722", href: "tel:+61478883722" },
               { icon: MapPin, label: "Location", value: "Perth, Australia", href: "#" },
-              { icon: Linkedin, label: "LinkedIn", value: "adwait-reddy", href: "https://www.linkedin.com/in/adwait-reddy" },
+              { icon: ExternalLink, label: "LinkedIn", value: "adwait-reddy", href: "https://www.linkedin.com/in/adwait-reddy" },
             ].map((item, i) => (
               <a
                 key={i}

@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { LinkedinIcon } from "lucide-react";
+import { ExternalLink } from "lucide-react";
 
 const AboutSection = () => {
   return (
@@ -53,7 +53,7 @@ const AboutSection = () => {
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-3 text-primary hover:text-foreground transition-colors text-sm font-medium"
               >
-                <Linkedin size={18} /> LinkedIn Profile
+                <ExternalLink size={18} /> LinkedIn Profile
               </a>
             </div>
           </div>
