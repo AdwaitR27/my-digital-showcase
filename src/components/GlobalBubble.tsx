@@ -45,7 +45,7 @@ const GlobalBubble = () => {
             card.style.position = "relative";
             card.style.zIndex = "20";
             card.style.boxShadow = "0 0 60px hsl(180 60% 50% / 0.15)";
-            bubbleScale.set(1.15);
+            bubbleScale.set(1.3);
           }
         }, 1500);
       } else if (!card) {
