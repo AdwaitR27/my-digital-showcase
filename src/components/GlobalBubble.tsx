@@ -40,12 +40,12 @@ const GlobalBubble = () => {
           if (currentTarget.current === card) {
             card.style.transition =
               "transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1), box-shadow 0.4s ease";
-            card.style.transform = "scale()";
+            card.style.transform = "scale(1.25)";
             card.style.transformOrigin = "center center";
             card.style.position = "relative";
             card.style.zIndex = "20";
             card.style.boxShadow = "0 0 60px hsl(180 60% 50% / 0.15)";
-            bubbleScale.set(1.3);
+            bubbleScale.set(1.25);
           }
         }, 1500);
       } else if (!card) {
