@@ -36,7 +36,7 @@ const HeroSection = () => {
             REDDY
           </h1>
           <p className="font-display text-lg md:text-xl tracking-[0.3em] text-primary mt-2 mb-6">
-            DATA ANALYST
+            DATA & AI ANALYST
           </p>
           <p className="text-muted-foreground leading-relaxed max-w-lg mb-8 text-base md:text-lg">
             Data professional with experience across consulting, research, analytics, and operations. 
