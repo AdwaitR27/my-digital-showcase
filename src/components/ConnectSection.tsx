@@ -1,5 +1,4 @@
 import { motion } from "framer-motion";
-import { Code2, Swords } from "lucide-react";
 import { useEffect, useState } from "react";
 
 const LEETCODE_USERNAME = "AdwaitR";
@@ -11,22 +10,23 @@ type LeetCodeStats = {
   mediumSolved: number;
   hardSolved: number;
   ranking: number;
+  acceptanceRate: number;
 };
 
 type ChessStats = {
   rapid: number | null;
   blitz: number | null;
   bullet: number | null;
+  totalWins: number;
 };
 
 const ConnectSection = () => {
   const [leetcode, setLeetcode] = useState<LeetCodeStats | null>(null);
   const [chess, setChess] = useState<ChessStats | null>(null);
-  const [leetcodeLoading, setLeetcodeLoading] = useState(true);
-  const [chessLoading, setChessLoading] = useState(true);
+  const [leetcodeFlipped, setLeetcodeFlipped] = useState(false);
+  const [chessFlipped, setChessFlipped] = useState(false);
 
   useEffect(() => {
-    // LeetCode stats
     fetch(`https://leetcode-stats-api.herokuapp.com/${LEETCODE_USERNAME}`)
       .then((r) => r.json())
       .then((data) => {
@@ -37,201 +37,289 @@ const ConnectSection = () => {
             mediumSolved: data.mediumSolved,
             hardSolved: data.hardSolved,
             ranking: data.ranking,
+            acceptanceRate: data.acceptanceRate,
           });
         }
       })
-      .catch(() => {
-        // Fail silently — fallback to just the CTA
-      })
-      .finally(() => setLeetcodeLoading(false));
+      .catch(() => {});
 
-    // Chess.com stats
     fetch(`https://api.chess.com/pub/player/${CHESSCOM_USERNAME}/stats`)
       .then((r) => r.json())
       .then((data) => {
+        const wins =
+          (data.chess_rapid?.record?.win ?? 0) +
+          (data.chess_blitz?.record?.win ?? 0) +
+          (data.chess_bullet?.record?.win ?? 0);
         setChess({
           rapid: data.chess_rapid?.last?.rating ?? null,
           blitz: data.chess_blitz?.last?.rating ?? null,
           bullet: data.chess_bullet?.last?.rating ?? null,
+          totalWins: wins,
         });
       })
-      .catch(() => {})
-      .finally(() => setChessLoading(false));
+      .catch(() => {});
   }, []);
 
   return (
     <section className="section-padding">
       <div className="max-w-7xl mx-auto">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <p className="text-primary text-sm tracking-[0.3em] uppercase mb-2">
+          <p className="text-primary text-xs tracking-[0.3em] uppercase mb-2 opacity-70">
             Outside of work
           </p>
-          <h2 className="font-display text-4xl md:text-6xl tracking-wider text-foreground mb-10">
-            Let's Connect
+          <h2 className="font-display text-3xl md:text-4xl tracking-wider text-foreground mb-2">
+            Also find me here
           </h2>
+          <p className="text-xs text-muted-foreground/70 mb-8">
+            Tap to flip and see live stats
+          </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* LeetCode Card */}
-          <motion.a
-            href={`https://leetcode.com/${LEETCODE_USERNAME}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            initial={{ opacity: 0, y: 20 }}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          {/* LeetCode Flip Card */}
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="glass-card rounded-xl p-6 md:p-7 hover:glow-border transition-all duration-500 group block"
+            transition={{ duration: 0.4 }}
+            className="relative h-44 cursor-pointer"
+            style={{ perspective: "1200px" }}
+            onClick={() => setLeetcodeFlipped(!leetcodeFlipped)}
           >
-            <div className="flex items-start gap-4 mb-4">
-              <div className="w-11 h-11 rounded-lg bg-primary/10 flex items-center justify-center shrink-0 group-hover:bg-primary/20 transition-colors">
-                <Code2 size={22} className="text-primary" />
-              </div>
-              <div className="flex-1">
-                <h3 className="font-display text-xl md:text-2xl tracking-wider text-foreground leading-tight">
-                  Got a good question?
-                </h3>
-                <p className="text-sm text-muted-foreground mt-1">
-                  Share it with me on LeetCode
-                </p>
-              </div>
-            </div>
-
-            {/* Stats */}
-            <div className="mt-5 pt-5 border-t border-border/30">
-              {leetcodeLoading ? (
-                <p className="text-xs text-muted-foreground/60">
-                  Loading stats...
-                </p>
-              ) : leetcode ? (
-                <div className="flex items-center justify-between flex-wrap gap-3">
-                  <div>
-                    <p className="font-display text-3xl text-primary">
-                      {leetcode.totalSolved}
-                    </p>
-                    <p className="text-[10px] text-muted-foreground tracking-wider uppercase mt-0.5">
-                      Problems solved
-                    </p>
-                  </div>
-                  <div className="flex gap-4 text-xs">
-                    <div className="text-center">
-                      <p className="text-green-400 font-medium">
-                        {leetcode.easySolved}
-                      </p>
-                      <p className="text-muted-foreground/60 text-[10px]">
-                        Easy
-                      </p>
-                    </div>
-                    <div className="text-center">
-                      <p className="text-yellow-400 font-medium">
-                        {leetcode.mediumSolved}
-                      </p>
-                      <p className="text-muted-foreground/60 text-[10px]">
-                        Medium
-                      </p>
-                    </div>
-                    <div className="text-center">
-                      <p className="text-red-400 font-medium">
-                        {leetcode.hardSolved}
-                      </p>
-                      <p className="text-muted-foreground/60 text-[10px]">
-                        Hard
-                      </p>
-                    </div>
-                  </div>
+            <motion.div
+              className="absolute inset-0 w-full h-full"
+              animate={{ rotateY: leetcodeFlipped ? 180 : 0 }}
+              transition={{ duration: 0.7, ease: [0.25, 0.1, 0.25, 1] }}
+              style={{ transformStyle: "preserve-3d" }}
+            >
+              {/* FRONT */}
+              <div
+                className="absolute inset-0 rounded-xl border border-border/40 bg-card/30 p-6 flex flex-col justify-between group hover:border-primary/40 transition-colors"
+                style={{ backfaceVisibility: "hidden" }}
+              >
+                <div className="flex items-center gap-3">
+                  <img
+                    src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/leetcode/leetcode-original.svg"
+                    alt="LeetCode"
+                    className="w-10 h-10 opacity-90"
+                  />
+                  <span className="font-display text-lg tracking-wider text-[#FFA116]">
+                    LeetCode
+                  </span>
                 </div>
-              ) : (
-                <p className="text-xs text-primary/70 group-hover:text-primary transition-colors">
-                  View my profile →
+
+                <div>
+                  <p className="font-display text-xl md:text-2xl tracking-wider text-foreground leading-tight">
+                    Got a good question?
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Share it with me — I'm always up for a challenge
+                  </p>
+                </div>
+
+                <p className="text-[10px] text-muted-foreground/60 tracking-wider uppercase">
+                  ↻ Tap for stats
                 </p>
-              )}
-            </div>
+              </div>
 
-            <p className="text-xs text-primary/60 mt-4 opacity-0 group-hover:opacity-100 transition-opacity">
-              @{LEETCODE_USERNAME} →
-            </p>
-          </motion.a>
+              {/* BACK */}
+              <a
+                href={`https://leetcode.com/${LEETCODE_USERNAME}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={(e) => e.stopPropagation()}
+                className="absolute inset-0 rounded-xl border border-[#FFA116]/40 bg-gradient-to-br from-[#1a1a1a] to-[#2a2a2a] p-6 flex flex-col justify-between"
+                style={{
+                  backfaceVisibility: "hidden",
+                  transform: "rotateY(180deg)",
+                }}
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <img
+                      src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/leetcode/leetcode-original.svg"
+                      alt="LeetCode"
+                      className="w-6 h-6"
+                    />
+                    <span className="text-xs text-[#FFA116] tracking-wider">
+                      @{LEETCODE_USERNAME}
+                    </span>
+                  </div>
+                  {leetcode && (
+                    <span className="text-[10px] text-muted-foreground/60">
+                      Rank #{leetcode.ranking.toLocaleString()}
+                    </span>
+                  )}
+                </div>
 
-          {/* Chess.com Card */}
-          <motion.a
-            href={`https://www.chess.com/member/${CHESSCOM_USERNAME}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            initial={{ opacity: 0, y: 20 }}
+                {leetcode ? (
+                  <div className="flex items-end justify-between gap-4">
+                    <div>
+                      <p className="font-display text-4xl md:text-5xl text-[#FFA116] leading-none">
+                        {leetcode.totalSolved}
+                      </p>
+                      <p className="text-[10px] text-muted-foreground tracking-wider uppercase mt-1.5">
+                        Problems Solved
+                      </p>
+                    </div>
+                    <div className="flex gap-3 text-xs">
+                      <div className="text-center">
+                        <p className="text-green-400 font-display text-lg">
+                          {leetcode.easySolved}
+                        </p>
+                        <p className="text-[9px] text-muted-foreground/70 tracking-wider">
+                          EASY
+                        </p>
+                      </div>
+                      <div className="text-center">
+                        <p className="text-yellow-400 font-display text-lg">
+                          {leetcode.mediumSolved}
+                        </p>
+                        <p className="text-[9px] text-muted-foreground/70 tracking-wider">
+                          MED
+                        </p>
+                      </div>
+                      <div className="text-center">
+                        <p className="text-red-400 font-display text-lg">
+                          {leetcode.hardSolved}
+                        </p>
+                        <p className="text-[9px] text-muted-foreground/70 tracking-wider">
+                          HARD
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <p className="text-xs text-muted-foreground/60">
+                    Loading stats...
+                  </p>
+                )}
+
+                <p className="text-[10px] text-[#FFA116]/70 tracking-wider uppercase">
+                  Visit profile →
+                </p>
+              </a>
+            </motion.div>
+          </motion.div>
+
+          {/* Chess.com Flip Card */}
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="glass-card rounded-xl p-6 md:p-7 hover:glow-border transition-all duration-500 group block"
+            transition={{ duration: 0.4, delay: 0.1 }}
+            className="relative h-44 cursor-pointer"
+            style={{ perspective: "1200px" }}
+            onClick={() => setChessFlipped(!chessFlipped)}
           >
-            <div className="flex items-start gap-4 mb-4">
-              <div className="w-11 h-11 rounded-lg bg-primary/10 flex items-center justify-center shrink-0 group-hover:bg-primary/20 transition-colors">
-                <Swords size={22} className="text-primary" />
-              </div>
-              <div className="flex-1">
-                <h3 className="font-display text-xl md:text-2xl tracking-wider text-foreground leading-tight">
-                  Love chess?
-                </h3>
-                <p className="text-sm text-muted-foreground mt-1">
-                  Let's play — challenge me anytime
-                </p>
-              </div>
-            </div>
+            <motion.div
+              className="absolute inset-0 w-full h-full"
+              animate={{ rotateY: chessFlipped ? 180 : 0 }}
+              transition={{ duration: 0.7, ease: [0.25, 0.1, 0.25, 1] }}
+              style={{ transformStyle: "preserve-3d" }}
+            >
+              {/* FRONT */}
+              <div
+                className="absolute inset-0 rounded-xl border border-border/40 bg-card/30 p-6 flex flex-col justify-between group hover:border-primary/40 transition-colors"
+                style={{ backfaceVisibility: "hidden" }}
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-lg bg-[#312e2b] flex items-center justify-center">
+                    <span className="text-[#81B64C] text-2xl leading-none">
+                      ♞
+                    </span>
+                  </div>
+                  <span className="font-display text-lg tracking-wider text-[#81B64C]">
+                    Chess.com
+                  </span>
+                </div>
 
-            {/* Stats */}
-            <div className="mt-5 pt-5 border-t border-border/30">
-              {chessLoading ? (
-                <p className="text-xs text-muted-foreground/60">
-                  Loading stats...
+                <div>
+                  <p className="font-display text-xl md:text-2xl tracking-wider text-foreground leading-tight">
+                    Love chess? Let's play.
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Challenge me anytime — always down for a game
+                  </p>
+                </div>
+
+                <p className="text-[10px] text-muted-foreground/60 tracking-wider uppercase">
+                  ↻ Tap for stats
                 </p>
-              ) : chess && (chess.rapid || chess.blitz || chess.bullet) ? (
-                <div className="flex items-center justify-between flex-wrap gap-3">
-                  {chess.rapid !== null && (
-                    <div>
-                      <p className="font-display text-2xl md:text-3xl text-primary">
-                        {chess.rapid}
+              </div>
+
+              {/* BACK */}
+              <a
+                href={`https://www.chess.com/member/${CHESSCOM_USERNAME}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={(e) => e.stopPropagation()}
+                className="absolute inset-0 rounded-xl border border-[#81B64C]/40 bg-gradient-to-br from-[#312e2b] to-[#1f1e1c] p-6 flex flex-col justify-between"
+                style={{
+                  backfaceVisibility: "hidden",
+                  transform: "rotateY(180deg)",
+                }}
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span className="text-[#81B64C] text-xl leading-none">
+                      ♞
+                    </span>
+                    <span className="text-xs text-[#81B64C] tracking-wider">
+                      @{CHESSCOM_USERNAME}
+                    </span>
+                  </div>
+                  {chess && chess.totalWins > 0 && (
+                    <span className="text-[10px] text-muted-foreground/60">
+                      {chess.totalWins} wins
+                    </span>
+                  )}
+                </div>
+
+                {chess && (chess.rapid || chess.blitz || chess.bullet) ? (
+                  <div className="grid grid-cols-3 gap-3">
+                    <div className="text-center">
+                      <p className="font-display text-2xl md:text-3xl text-[#81B64C] leading-none">
+                        {chess.rapid ?? "—"}
                       </p>
-                      <p className="text-[10px] text-muted-foreground tracking-wider uppercase mt-0.5">
+                      <p className="text-[10px] text-muted-foreground tracking-wider uppercase mt-1">
                         Rapid
                       </p>
                     </div>
-                  )}
-                  {chess.blitz !== null && (
-                    <div>
-                      <p className="font-display text-2xl md:text-3xl text-primary">
-                        {chess.blitz}
+                    <div className="text-center border-x border-[#81B64C]/15">
+                      <p className="font-display text-2xl md:text-3xl text-[#81B64C] leading-none">
+                        {chess.blitz ?? "—"}
                       </p>
-                      <p className="text-[10px] text-muted-foreground tracking-wider uppercase mt-0.5">
+                      <p className="text-[10px] text-muted-foreground tracking-wider uppercase mt-1">
                         Blitz
                       </p>
                     </div>
-                  )}
-                  {chess.bullet !== null && (
-                    <div>
-                      <p className="font-display text-2xl md:text-3xl text-primary">
-                        {chess.bullet}
+                    <div className="text-center">
+                      <p className="font-display text-2xl md:text-3xl text-[#81B64C] leading-none">
+                        {chess.bullet ?? "—"}
                       </p>
-                      <p className="text-[10px] text-muted-foreground tracking-wider uppercase mt-0.5">
+                      <p className="text-[10px] text-muted-foreground tracking-wider uppercase mt-1">
                         Bullet
                       </p>
                     </div>
-                  )}
-                </div>
-              ) : (
-                <p className="text-xs text-primary/70 group-hover:text-primary transition-colors">
-                  View my profile →
-                </p>
-              )}
-            </div>
+                  </div>
+                ) : (
+                  <p className="text-xs text-muted-foreground/60">
+                    Loading stats...
+                  </p>
+                )}
 
-            <p className="text-xs text-primary/60 mt-4 opacity-0 group-hover:opacity-100 transition-opacity">
-              @{CHESSCOM_USERNAME} →
-            </p>
-          </motion.a>
+                <p className="text-[10px] text-[#81B64C]/70 tracking-wider uppercase">
+                  Visit profile →
+                </p>
+              </a>
+            </motion.div>
+          </motion.div>
         </div>
       </div>
     </section>
