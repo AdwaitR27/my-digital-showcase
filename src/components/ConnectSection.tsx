@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 
 const LEETCODE_USERNAME = "AdwaitR";
 const CHESSCOM_USERNAME = "Pirate_chesss";
+const FLIP_INTERVAL = 6000; // ms
+const OFFSET = 3000; // ms — chess card starts flipping halfway through leetcode cycle
 
 type LeetCodeStats = {
   totalSolved: number;
@@ -32,6 +34,7 @@ const ConnectSection = () => {
   const [leetcodePaused, setLeetcodePaused] = useState(false);
   const [chessPaused, setChessPaused] = useState(false);
 
+  // Fetch data once on mount
   useEffect(() => {
     fetch(`https://leetcode-stats-api.herokuapp.com/${LEETCODE_USERNAME}`)
       .then((r) => r.json())
@@ -70,26 +73,28 @@ const ConnectSection = () => {
       .catch(() => {});
   }, []);
 
-  // Auto-flip LeetCode card every 1.5s (pause on hover)
+  // LeetCode auto-flip
   useEffect(() => {
     if (leetcodePaused) return;
     const interval = setInterval(() => {
       setLeetcodeFlipped((prev) => !prev);
-    }, 6000);
+    }, FLIP_INTERVAL);
     return () => clearInterval(interval);
   }, [leetcodePaused]);
 
-  // Auto-flip Chess.com card every 1.5s, offset by 0.75s so they're out of sync
+  // Chess.com auto-flip (offset so they alternate rather than sync)
   useEffect(() => {
     if (chessPaused) return;
     const timeout = setTimeout(() => {
       setChessFlipped((prev) => !prev);
-      const interval = setInterval(() => {
-        setChessFlipped((prev) => !prev);
-      }, 6000);
-      return () => clearInterval(interval);
-    }, 3000);
-    return () => clearTimeout(timeout);
+    }, OFFSET);
+    const interval = setInterval(() => {
+      setChessFlipped((prev) => !prev);
+    }, FLIP_INTERVAL);
+    return () => {
+      clearTimeout(timeout);
+      clearInterval(interval);
+    };
   }, [chessPaused]);
 
   return (
@@ -108,7 +113,7 @@ const ConnectSection = () => {
             Also find me here
           </h2>
           <p className="text-xs text-muted-foreground/70 mb-8">
-            Auto-flipping · Hover to pause
+            Auto-flipping · Hover to pause · Click to visit profile
           </p>
         </motion.div>
 
@@ -119,11 +124,10 @@ const ConnectSection = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.4 }}
-            className="relative h-44 cursor-pointer"
+            className="relative h-44"
             style={{ perspective: "1200px" }}
             onMouseEnter={() => setLeetcodePaused(true)}
             onMouseLeave={() => setLeetcodePaused(false)}
-            onClick={() => setLeetcodeFlipped(!leetcodeFlipped)}
           >
             <motion.div
               className="absolute inset-0 w-full h-full"
@@ -132,8 +136,11 @@ const ConnectSection = () => {
               style={{ transformStyle: "preserve-3d" }}
             >
               {/* FRONT */}
-              <div
-                className="absolute inset-0 rounded-xl border border-border/40 bg-card/30 p-6 flex flex-col justify-between group hover:border-primary/40 transition-colors"
+              <a
+                href={`https://leetcode.com/${LEETCODE_USERNAME}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="absolute inset-0 rounded-xl border border-border/40 bg-card/30 p-6 flex flex-col justify-between hover:border-[#FFA116]/40 transition-colors"
                 style={{ backfaceVisibility: "hidden" }}
               >
                 <div className="flex items-center gap-3">
@@ -159,15 +166,14 @@ const ConnectSection = () => {
                 <p className="text-[10px] text-muted-foreground/60 tracking-wider uppercase">
                   ↻ Auto-flipping
                 </p>
-              </div>
+              </a>
 
               {/* BACK */}
               <a
                 href={`https://leetcode.com/${LEETCODE_USERNAME}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                onClick={(e) => e.stopPropagation()}
-                className="absolute inset-0 rounded-xl border border-[#FFA116]/30 bg-gradient-to-br from-[#1f1f1f] to-[#2a2a2a] p-4 flex items-center gap-4"
+                className="absolute inset-0 rounded-xl border border-[#FFA116]/30 bg-gradient-to-br from-[#1f1f1f] to-[#2a2a2a] p-5 flex items-center gap-5"
                 style={{
                   backfaceVisibility: "hidden",
                   transform: "rotateY(180deg)",
@@ -175,13 +181,12 @@ const ConnectSection = () => {
               >
                 {leetcode ? (
                   <>
-                    {/* Circular arc chart */}
-                    <div className="relative w-32 h-32 shrink-0">
+                    {/* Circular chart */}
+                    <div className="relative w-28 h-28 shrink-0">
                       <svg
                         viewBox="0 0 120 120"
                         className="w-full h-full -rotate-90"
                       >
-                        {/* Background track */}
                         <circle
                           cx="60"
                           cy="60"
@@ -193,8 +198,8 @@ const ConnectSection = () => {
                           strokeLinecap="round"
                         />
                         {(() => {
-                          const C = 2 * Math.PI * 50; // circumference ~314
-                          const visibleArc = (235 / 314) * C; // the 3/4 arc
+                          const C = 2 * Math.PI * 50;
+                          const visibleArc = (235 / 314) * C;
                           const easyLen =
                             (leetcode.easySolved / leetcode.totalEasy) *
                             (visibleArc / 3);
@@ -206,7 +211,6 @@ const ConnectSection = () => {
                             (visibleArc / 3);
                           return (
                             <>
-                              {/* Easy arc (green) */}
                               <circle
                                 cx="60"
                                 cy="60"
@@ -215,10 +219,8 @@ const ConnectSection = () => {
                                 stroke="#00B8A3"
                                 strokeWidth="6"
                                 strokeDasharray={`${easyLen} ${C}`}
-                                strokeDashoffset="0"
                                 strokeLinecap="round"
                               />
-                              {/* Medium arc (yellow) */}
                               <circle
                                 cx="60"
                                 cy="60"
@@ -230,7 +232,6 @@ const ConnectSection = () => {
                                 strokeDashoffset={`-${visibleArc / 3}`}
                                 strokeLinecap="round"
                               />
-                              {/* Hard arc (red) */}
                               <circle
                                 cx="60"
                                 cy="60"
@@ -246,29 +247,28 @@ const ConnectSection = () => {
                           );
                         })()}
                       </svg>
-                      {/* Center text */}
                       <div className="absolute inset-0 flex flex-col items-center justify-center">
-                        <p className="font-display text-2xl text-foreground leading-none">
-                          <span className="text-3xl">
+                        <p className="font-display text-foreground leading-none">
+                          <span className="text-2xl">
                             {leetcode.totalSolved}
                           </span>
-                          <span className="text-muted-foreground/60 text-sm">
+                          <span className="text-muted-foreground/60 text-xs">
                             /{leetcode.totalQuestions}
                           </span>
                         </p>
-                        <p className="text-[10px] text-green-400 mt-1 flex items-center gap-0.5">
-                          <span>✓</span> Solved
+                        <p className="text-[9px] text-green-400 mt-0.5">
+                          ✓ Solved
                         </p>
                       </div>
                     </div>
 
-                    {/* Right side: Easy/Med/Hard tiles */}
+                    {/* Right: tiles */}
                     <div className="flex-1 flex flex-col gap-1.5">
                       <div className="flex items-center justify-between px-3 py-1.5 rounded-md bg-secondary/40">
                         <span className="text-xs text-[#00B8A3] font-medium">
                           Easy
                         </span>
-                        <span className="text-xs text-foreground font-display tracking-wide">
+                        <span className="text-xs text-foreground font-display">
                           {leetcode.easySolved}/{leetcode.totalEasy}
                         </span>
                       </div>
@@ -276,7 +276,7 @@ const ConnectSection = () => {
                         <span className="text-xs text-[#FFC01E] font-medium">
                           Med.
                         </span>
-                        <span className="text-xs text-foreground font-display tracking-wide">
+                        <span className="text-xs text-foreground font-display">
                           {leetcode.mediumSolved}/{leetcode.totalMedium}
                         </span>
                       </div>
@@ -284,7 +284,7 @@ const ConnectSection = () => {
                         <span className="text-xs text-[#FF375F] font-medium">
                           Hard
                         </span>
-                        <span className="text-xs text-foreground font-display tracking-wide">
+                        <span className="text-xs text-foreground font-display">
                           {leetcode.hardSolved}/{leetcode.totalHard}
                         </span>
                       </div>
@@ -305,11 +305,10 @@ const ConnectSection = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.4, delay: 0.1 }}
-            className="relative h-44 cursor-pointer"
+            className="relative h-44"
             style={{ perspective: "1200px" }}
             onMouseEnter={() => setChessPaused(true)}
             onMouseLeave={() => setChessPaused(false)}
-            onClick={() => setChessFlipped(!chessFlipped)}
           >
             <motion.div
               className="absolute inset-0 w-full h-full"
@@ -318,8 +317,11 @@ const ConnectSection = () => {
               style={{ transformStyle: "preserve-3d" }}
             >
               {/* FRONT */}
-              <div
-                className="absolute inset-0 rounded-xl border border-border/40 bg-card/30 p-6 flex flex-col justify-between group hover:border-primary/40 transition-colors"
+              <a
+                href={`https://www.chess.com/member/${CHESSCOM_USERNAME}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="absolute inset-0 rounded-xl border border-border/40 bg-card/30 p-6 flex flex-col justify-between hover:border-[#81B64C]/40 transition-colors"
                 style={{ backfaceVisibility: "hidden" }}
               >
                 <div className="flex items-center gap-3">
@@ -345,14 +347,13 @@ const ConnectSection = () => {
                 <p className="text-[10px] text-muted-foreground/60 tracking-wider uppercase">
                   ↻ Auto-flipping
                 </p>
-              </div>
+              </a>
 
               {/* BACK */}
               <a
                 href={`https://www.chess.com/member/${CHESSCOM_USERNAME}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                onClick={(e) => e.stopPropagation()}
                 className="absolute inset-0 rounded-xl border border-[#81B64C]/40 bg-gradient-to-br from-[#312e2b] to-[#1f1e1c] p-6 flex flex-col justify-between"
                 style={{
                   backfaceVisibility: "hidden",
