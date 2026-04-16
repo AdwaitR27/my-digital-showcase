@@ -5,7 +5,7 @@ import norwoodLogo from "@/assets/norwood.png";
 import isroLogo from "@/assets/isro.png";
 import modoMioLogo from "@/assets/ModoMio.jpeg";
 
-const experiences = [
+const professionalExperience = [
   {
     title: "Research Assistant — Casual",
     company: "University of Western Australia",
@@ -46,6 +46,9 @@ const experiences = [
       "Achieved early promotion within one year due to strong adaptability, rapid learning of new tools, and effective stakeholder engagement",
     ],
   },
+];
+
+const internships = [
   {
     title: "AI/ML Intern",
     company: "Norwood Systems",
@@ -71,7 +74,7 @@ const experiences = [
     title: "Research Analyst — Intern",
     company: "Indian Space Research Organisation (ISRO)",
     location: "Nagpur, India",
-    period: "July 2020",
+    period: "July 2020 - Aug 2020",
     image: isroLogo,
     alt: "ISRO logo",
     description:
@@ -84,126 +87,143 @@ const experiences = [
   },
 ];
 
+type ExperienceItem = (typeof professionalExperience)[0];
+
+const TimelineCard = ({ exp, i }: { exp: ExperienceItem; i: number }) => (
+  <motion.div
+    key={i}
+    initial={{ opacity: 0, y: 30 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true }}
+    transition={{ duration: 0.5, delay: i * 0.1 }}
+    className="relative pl-8 md:pl-20 md:ml-40"
+  >
+    {/* Timeline date label */}
+    <div className="hidden md:block absolute left-0 md:left-[calc(-10rem-1rem)] top-7 w-36 text-right">
+      <p className="font-display text-lg md:text-xl tracking-wider text-primary whitespace-nowrap">
+        {exp.period}
+      </p>
+    </div>
+    <p className="md:hidden text-sm font-display tracking-wider text-primary mb-2">
+      {exp.period}
+    </p>
+
+    {/* Timeline dot */}
+    <div className="absolute left-0 md:left-8 top-8 w-3 h-3 -translate-x-1.5 rounded-full bg-primary" />
+
+    {/* Card */}
+    <div className="glass-card group overflow-hidden rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-primary/5">
+      <div className="flex flex-col md:flex-row">
+        <div className="flex items-center justify-center h-48 md:h-auto md:w-64 lg:w-72 shrink-0 bg-white px-8 py-8 rounded-t-xl md:rounded-t-none md:rounded-l-xl">
+          <img
+            src={exp.image}
+            alt={exp.alt}
+            className="max-h-24 md:max-h-28 lg:max-h-32 max-w-full w-auto object-contain"
+          />
+        </div>
+
+        <div className="flex-1 p-5 md:p-6 lg:p-8 flex flex-col justify-center">
+          <h3 className="font-display text-xl md:text-2xl lg:text-3xl tracking-wider text-foreground leading-tight">
+            {exp.company}
+          </h3>
+          <p className="text-xs text-muted-foreground mt-1 md:hidden">
+            {exp.period}
+          </p>
+
+          <div className="max-h-0 overflow-hidden opacity-0 transition-all duration-500 ease-in-out group-hover:max-h-[1200px] group-hover:opacity-100 group-hover:mt-3">
+            <p className="text-primary text-sm font-medium mb-1">{exp.title}</p>
+            <p className="text-xs text-muted-foreground mb-3">{exp.location}</p>
+            <p className="text-muted-foreground text-sm leading-relaxed mb-4">
+              {exp.description}
+            </p>
+
+            <p className="text-xs text-primary tracking-[0.2em] uppercase mb-2">
+              Key Responsibilities
+            </p>
+            <ul className="space-y-2 mb-4">
+              {exp.responsibilities.map((point, j) => (
+                <li key={j} className="text-muted-foreground text-sm flex gap-2">
+                  <span className="text-primary mt-1 shrink-0">▸</span>
+                  {point}
+                </li>
+              ))}
+            </ul>
+
+            {exp.achievements.length > 0 && (
+              <>
+                <p className="text-xs text-primary tracking-[0.2em] uppercase mb-2">
+                  Achievements
+                </p>
+                <ul className="space-y-2">
+                  {exp.achievements.map((point, j) => (
+                    <li key={j} className="text-muted-foreground text-sm flex gap-2">
+                      <span className="text-primary mt-1 shrink-0">★</span>
+                      {point}
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  </motion.div>
+);
+
 const ExperienceSection = () => {
   return (
     <section id="experience" className="section-padding">
       <div className="max-w-7xl mx-auto">
+        {/* Professional Experience */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
+          <p className="text-primary text-sm tracking-[0.3em] uppercase mb-2">
+            Professional
+          </p>
           <h2 className="font-display text-4xl md:text-6xl tracking-wider text-foreground mb-12">
             Experience
           </h2>
         </motion.div>
 
         <div className="relative">
-          {/* Timeline line */}
           <div className="absolute left-0 md:left-[calc(10rem+2rem)] top-0 bottom-0 w-px bg-border" />
-
           <div className="space-y-10">
-            {experiences.map((exp, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.1 }}
-                className="relative pl-8 md:pl-20 md:ml-40"
-              >
-                {/* Timeline date label — left of the line */}
-                <div className="hidden md:block absolute left-0 md:left-[calc(-10rem-1rem)] top-7 w-36 text-right">
-                  <p className="font-display text-lg md:text-xl tracking-wider text-primary whitespace-nowrap">
-                    {exp.period}
-                  </p>
-                </div>
-                {/* Mobile date label — above card */}
-                <p className="md:hidden text-sm font-display tracking-wider text-primary mb-2">
-                  {exp.period}
-                </p>
-
-                {/* Timeline dot */}
-                <div className="absolute left-0 md:left-8 top-8 w-3 h-3 -translate-x-1.5 rounded-full bg-primary" />
-
-                {/* Card */}
-                <div className="glass-card group overflow-hidden rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-primary/5">
-                  <div className="flex flex-col md:flex-row">
-                    {/* Logo tile — big square on the left */}
-                    <div className="flex items-center justify-center h-48 md:h-auto md:w-64 lg:w-72 shrink-0 bg-white px-8 py-8 rounded-t-xl md:rounded-t-none md:rounded-l-xl">
-                      <img
-                        src={exp.image}
-                        alt={exp.alt}
-                        className="max-h-24 md:max-h-28 lg:max-h-32 max-w-full w-auto object-contain"
-                      />
-                    </div>
-
-                    {/* Text content — slides in from right on hover */}
-                    <div className="flex-1 p-5 md:p-6 lg:p-8 flex flex-col justify-center">
-                      {/* Always visible: company name */}
-                      <h3 className="font-display text-xl md:text-2xl lg:text-3xl tracking-wider text-foreground leading-tight">
-                        {exp.company}
-                      </h3>
-                      <p className="text-xs text-muted-foreground mt-1 md:hidden">
-                        {exp.period}
-                      </p>
-
-                      {/* Hover reveal: designation + details */}
-                      <div className="max-h-0 overflow-hidden opacity-0 transition-all duration-500 ease-in-out group-hover:max-h-[1200px] group-hover:opacity-100 group-hover:mt-3">
-                        <p className="text-primary text-sm font-medium mb-1">
-                          {exp.title}
-                        </p>
-                        <p className="text-xs text-muted-foreground mb-3">
-                          {exp.location}
-                        </p>
-                        <p className="text-muted-foreground text-sm leading-relaxed mb-4">
-                          {exp.description}
-                        </p>
-
-                        {/* Key Responsibilities */}
-                        <p className="text-xs text-primary tracking-[0.2em] uppercase mb-2">
-                          Key Responsibilities
-                        </p>
-                        <ul className="space-y-2 mb-4">
-                          {exp.responsibilities.map((point, j) => (
-                            <li
-                              key={j}
-                              className="text-muted-foreground text-sm flex gap-2"
-                            >
-                              <span className="text-primary mt-1 shrink-0">▸</span>
-                              {point}
-                            </li>
-                          ))}
-                        </ul>
-
-                        {/* Achievements */}
-                        {exp.achievements.length > 0 && (
-                          <>
-                            <p className="text-xs text-primary tracking-[0.2em] uppercase mb-2">
-                              Achievements
-                            </p>
-                            <ul className="space-y-2">
-                              {exp.achievements.map((point, j) => (
-                                <li
-                                  key={j}
-                                  className="text-muted-foreground text-sm flex gap-2"
-                                >
-                                  <span className="text-primary mt-1 shrink-0">★</span>
-                                  {point}
-                                </li>
-                              ))}
-                            </ul>
-                          </>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
+            {professionalExperience.map((exp, i) => (
+              <TimelineCard key={i} exp={exp} i={i} />
             ))}
           </div>
         </div>
+
+        {/* Internships */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="mt-20"
+        >
+          <p className="text-primary text-sm tracking-[0.3em] uppercase mb-2">
+            Internships
+          </p>
+          <h2 className="font-display text-4xl md:text-6xl tracking-wider text-foreground mb-12">
+            Early Career
+          </h2>
+        </motion.div>
+
+        <div className="relative">
+          <div className="absolute left-0 md:left-[calc(10rem+2rem)] top-0 bottom-0 w-px bg-border" />
+          <div className="space-y-10">
+            {internships.map((exp, i) => (
+              <TimelineCard key={i} exp={exp} i={i} />
+            ))}
+          </div>
+        </div>
+
         {/* Additional Experience */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -221,7 +241,6 @@ const ExperienceSection = () => {
 
           <div className="glass-card group overflow-hidden rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-primary/5">
             <div className="flex flex-col md:flex-row">
-              {/* Logo tile */}
               <div className="flex items-center justify-center h-48 md:h-auto md:w-64 lg:w-72 shrink-0 bg-white px-8 py-8 rounded-t-xl md:rounded-t-none md:rounded-l-xl">
                 <img
                   src={modoMioLogo}
@@ -230,7 +249,6 @@ const ExperienceSection = () => {
                 />
               </div>
 
-              {/* Text content */}
               <div className="flex-1 p-5 md:p-6 lg:p-8 flex flex-col justify-center">
                 <h3 className="font-display text-xl md:text-2xl lg:text-3xl tracking-wider text-foreground leading-tight">
                   Crown Resorts
@@ -239,7 +257,6 @@ const ExperienceSection = () => {
                   2024 – Present
                 </p>
 
-                {/* Hover reveal */}
                 <div className="max-h-0 overflow-hidden opacity-0 transition-all duration-500 ease-in-out group-hover:max-h-[1200px] group-hover:opacity-100 group-hover:mt-3">
                   <p className="text-primary text-sm font-medium mb-1">
                     Sommelier / Waitperson — Part Time
