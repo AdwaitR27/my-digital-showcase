@@ -13,7 +13,7 @@ const AboutSection = () => {
         >
           <p className="text-primary text-sm tracking-[0.3em] uppercase mb-2">Data-Driven and Dedicated</p>
           <h2 className="font-display text-4xl md:text-6xl tracking-wider text-foreground mb-8">
-            Data Analyst Ready to Make an Impact
+            Data & AI Analyst Ready to Make an Impact
           </h2>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
             <div className="text-muted-foreground leading-relaxed space-y-4 text-base md:text-lg">
@@ -30,7 +30,7 @@ const AboutSection = () => {
               <p>
                 I'm passionate about translating complex data into actionable insights that drive real business 
                 decisions. Whether it's building real-time analytics platforms for emergency services or housing 
-                market dashboards, I bring analytical rigor and clear communication to every project.
+                market dashboards, I bring analytical with AI experience and clear communication to every project.
               </p>
             </div>
             <div className="flex flex-col gap-6">
