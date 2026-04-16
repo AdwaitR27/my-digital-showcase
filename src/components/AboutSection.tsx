@@ -48,7 +48,7 @@ const AboutSection = () => {
                 </div>
               </div>
               <a
-                href="https://www.linkedin.com/in/adwait-reddy"
+                href="https://www.linkedin.com/in/adwait-reddy-b60326250/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-3 text-primary hover:text-foreground transition-colors text-sm font-medium"
