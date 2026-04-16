@@ -75,7 +75,7 @@ const ConnectSection = () => {
     if (leetcodePaused) return;
     const interval = setInterval(() => {
       setLeetcodeFlipped((prev) => !prev);
-    }, 1500);
+    }, 6000);
     return () => clearInterval(interval);
   }, [leetcodePaused]);
 
@@ -86,9 +86,9 @@ const ConnectSection = () => {
       setChessFlipped((prev) => !prev);
       const interval = setInterval(() => {
         setChessFlipped((prev) => !prev);
-      }, 1500);
+      }, 6000);
       return () => clearInterval(interval);
-    }, 750);
+    }, 3000);
     return () => clearTimeout(timeout);
   }, [chessPaused]);
 
