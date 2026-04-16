@@ -6,9 +6,13 @@ const CHESSCOM_USERNAME = "Pirate_chesss";
 
 type LeetCodeStats = {
   totalSolved: number;
+  totalQuestions: number;
   easySolved: number;
+  totalEasy: number;
   mediumSolved: number;
+  totalMedium: number;
   hardSolved: number;
+  totalHard: number;
   ranking: number;
   acceptanceRate: number;
 };
@@ -25,6 +29,8 @@ const ConnectSection = () => {
   const [chess, setChess] = useState<ChessStats | null>(null);
   const [leetcodeFlipped, setLeetcodeFlipped] = useState(false);
   const [chessFlipped, setChessFlipped] = useState(false);
+  const [leetcodePaused, setLeetcodePaused] = useState(false);
+  const [chessPaused, setChessPaused] = useState(false);
 
   useEffect(() => {
     fetch(`https://leetcode-stats-api.herokuapp.com/${LEETCODE_USERNAME}`)
@@ -33,9 +39,13 @@ const ConnectSection = () => {
         if (data.status === "success") {
           setLeetcode({
             totalSolved: data.totalSolved,
+            totalQuestions: data.totalQuestions,
             easySolved: data.easySolved,
+            totalEasy: data.totalEasy,
             mediumSolved: data.mediumSolved,
+            totalMedium: data.totalMedium,
             hardSolved: data.hardSolved,
+            totalHard: data.totalHard,
             ranking: data.ranking,
             acceptanceRate: data.acceptanceRate,
           });
@@ -60,6 +70,28 @@ const ConnectSection = () => {
       .catch(() => {});
   }, []);
 
+  // Auto-flip LeetCode card every 1.5s (pause on hover)
+  useEffect(() => {
+    if (leetcodePaused) return;
+    const interval = setInterval(() => {
+      setLeetcodeFlipped((prev) => !prev);
+    }, 1500);
+    return () => clearInterval(interval);
+  }, [leetcodePaused]);
+
+  // Auto-flip Chess.com card every 1.5s, offset by 0.75s so they're out of sync
+  useEffect(() => {
+    if (chessPaused) return;
+    const timeout = setTimeout(() => {
+      setChessFlipped((prev) => !prev);
+      const interval = setInterval(() => {
+        setChessFlipped((prev) => !prev);
+      }, 1500);
+      return () => clearInterval(interval);
+    }, 750);
+    return () => clearTimeout(timeout);
+  }, [chessPaused]);
+
   return (
     <section className="section-padding">
       <div className="max-w-7xl mx-auto">
@@ -76,7 +108,7 @@ const ConnectSection = () => {
             Also find me here
           </h2>
           <p className="text-xs text-muted-foreground/70 mb-8">
-            Tap to flip and see live stats
+            Auto-flipping · Hover to pause
           </p>
         </motion.div>
 
@@ -89,6 +121,8 @@ const ConnectSection = () => {
             transition={{ duration: 0.4 }}
             className="relative h-44 cursor-pointer"
             style={{ perspective: "1200px" }}
+            onMouseEnter={() => setLeetcodePaused(true)}
+            onMouseLeave={() => setLeetcodePaused(false)}
             onClick={() => setLeetcodeFlipped(!leetcodeFlipped)}
           >
             <motion.div
@@ -123,7 +157,7 @@ const ConnectSection = () => {
                 </div>
 
                 <p className="text-[10px] text-muted-foreground/60 tracking-wider uppercase">
-                  ↻ Tap for stats
+                  ↻ Auto-flipping
                 </p>
               </div>
 
@@ -133,76 +167,134 @@ const ConnectSection = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={(e) => e.stopPropagation()}
-                className="absolute inset-0 rounded-xl border border-[#FFA116]/40 bg-gradient-to-br from-[#1a1a1a] to-[#2a2a2a] p-6 flex flex-col justify-between"
+                className="absolute inset-0 rounded-xl border border-[#FFA116]/30 bg-gradient-to-br from-[#1f1f1f] to-[#2a2a2a] p-4 flex items-center gap-4"
                 style={{
                   backfaceVisibility: "hidden",
                   transform: "rotateY(180deg)",
                 }}
               >
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <img
-                      src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/leetcode/leetcode-original.svg"
-                      alt="LeetCode"
-                      className="w-6 h-6"
-                    />
-                    <span className="text-xs text-[#FFA116] tracking-wider">
-                      @{LEETCODE_USERNAME}
-                    </span>
-                  </div>
-                  {leetcode && (
-                    <span className="text-[10px] text-muted-foreground/60">
-                      Rank #{leetcode.ranking.toLocaleString()}
-                    </span>
-                  )}
-                </div>
-
                 {leetcode ? (
-                  <div className="flex items-end justify-between gap-4">
-                    <div>
-                      <p className="font-display text-4xl md:text-5xl text-[#FFA116] leading-none">
-                        {leetcode.totalSolved}
-                      </p>
-                      <p className="text-[10px] text-muted-foreground tracking-wider uppercase mt-1.5">
-                        Problems Solved
-                      </p>
+                  <>
+                    {/* Circular arc chart */}
+                    <div className="relative w-32 h-32 shrink-0">
+                      <svg
+                        viewBox="0 0 120 120"
+                        className="w-full h-full -rotate-90"
+                      >
+                        {/* Background track */}
+                        <circle
+                          cx="60"
+                          cy="60"
+                          r="50"
+                          fill="none"
+                          stroke="hsl(220 15% 20%)"
+                          strokeWidth="6"
+                          strokeDasharray="235 79"
+                          strokeLinecap="round"
+                        />
+                        {(() => {
+                          const C = 2 * Math.PI * 50; // circumference ~314
+                          const visibleArc = (235 / 314) * C; // the 3/4 arc
+                          const easyLen =
+                            (leetcode.easySolved / leetcode.totalEasy) *
+                            (visibleArc / 3);
+                          const medLen =
+                            (leetcode.mediumSolved / leetcode.totalMedium) *
+                            (visibleArc / 3);
+                          const hardLen =
+                            (leetcode.hardSolved / leetcode.totalHard) *
+                            (visibleArc / 3);
+                          return (
+                            <>
+                              {/* Easy arc (green) */}
+                              <circle
+                                cx="60"
+                                cy="60"
+                                r="50"
+                                fill="none"
+                                stroke="#00B8A3"
+                                strokeWidth="6"
+                                strokeDasharray={`${easyLen} ${C}`}
+                                strokeDashoffset="0"
+                                strokeLinecap="round"
+                              />
+                              {/* Medium arc (yellow) */}
+                              <circle
+                                cx="60"
+                                cy="60"
+                                r="50"
+                                fill="none"
+                                stroke="#FFC01E"
+                                strokeWidth="6"
+                                strokeDasharray={`${medLen} ${C}`}
+                                strokeDashoffset={`-${visibleArc / 3}`}
+                                strokeLinecap="round"
+                              />
+                              {/* Hard arc (red) */}
+                              <circle
+                                cx="60"
+                                cy="60"
+                                r="50"
+                                fill="none"
+                                stroke="#FF375F"
+                                strokeWidth="6"
+                                strokeDasharray={`${hardLen} ${C}`}
+                                strokeDashoffset={`-${(visibleArc / 3) * 2}`}
+                                strokeLinecap="round"
+                              />
+                            </>
+                          );
+                        })()}
+                      </svg>
+                      {/* Center text */}
+                      <div className="absolute inset-0 flex flex-col items-center justify-center">
+                        <p className="font-display text-2xl text-foreground leading-none">
+                          <span className="text-3xl">
+                            {leetcode.totalSolved}
+                          </span>
+                          <span className="text-muted-foreground/60 text-sm">
+                            /{leetcode.totalQuestions}
+                          </span>
+                        </p>
+                        <p className="text-[10px] text-green-400 mt-1 flex items-center gap-0.5">
+                          <span>✓</span> Solved
+                        </p>
+                      </div>
                     </div>
-                    <div className="flex gap-3 text-xs">
-                      <div className="text-center">
-                        <p className="text-green-400 font-display text-lg">
-                          {leetcode.easySolved}
-                        </p>
-                        <p className="text-[9px] text-muted-foreground/70 tracking-wider">
-                          EASY
-                        </p>
+
+                    {/* Right side: Easy/Med/Hard tiles */}
+                    <div className="flex-1 flex flex-col gap-1.5">
+                      <div className="flex items-center justify-between px-3 py-1.5 rounded-md bg-secondary/40">
+                        <span className="text-xs text-[#00B8A3] font-medium">
+                          Easy
+                        </span>
+                        <span className="text-xs text-foreground font-display tracking-wide">
+                          {leetcode.easySolved}/{leetcode.totalEasy}
+                        </span>
                       </div>
-                      <div className="text-center">
-                        <p className="text-yellow-400 font-display text-lg">
-                          {leetcode.mediumSolved}
-                        </p>
-                        <p className="text-[9px] text-muted-foreground/70 tracking-wider">
-                          MED
-                        </p>
+                      <div className="flex items-center justify-between px-3 py-1.5 rounded-md bg-secondary/40">
+                        <span className="text-xs text-[#FFC01E] font-medium">
+                          Med.
+                        </span>
+                        <span className="text-xs text-foreground font-display tracking-wide">
+                          {leetcode.mediumSolved}/{leetcode.totalMedium}
+                        </span>
                       </div>
-                      <div className="text-center">
-                        <p className="text-red-400 font-display text-lg">
-                          {leetcode.hardSolved}
-                        </p>
-                        <p className="text-[9px] text-muted-foreground/70 tracking-wider">
-                          HARD
-                        </p>
+                      <div className="flex items-center justify-between px-3 py-1.5 rounded-md bg-secondary/40">
+                        <span className="text-xs text-[#FF375F] font-medium">
+                          Hard
+                        </span>
+                        <span className="text-xs text-foreground font-display tracking-wide">
+                          {leetcode.hardSolved}/{leetcode.totalHard}
+                        </span>
                       </div>
                     </div>
-                  </div>
+                  </>
                 ) : (
-                  <p className="text-xs text-muted-foreground/60">
+                  <p className="text-xs text-muted-foreground/60 w-full text-center">
                     Loading stats...
                   </p>
                 )}
-
-                <p className="text-[10px] text-[#FFA116]/70 tracking-wider uppercase">
-                  Visit profile →
-                </p>
               </a>
             </motion.div>
           </motion.div>
@@ -215,6 +307,8 @@ const ConnectSection = () => {
             transition={{ duration: 0.4, delay: 0.1 }}
             className="relative h-44 cursor-pointer"
             style={{ perspective: "1200px" }}
+            onMouseEnter={() => setChessPaused(true)}
+            onMouseLeave={() => setChessPaused(false)}
             onClick={() => setChessFlipped(!chessFlipped)}
           >
             <motion.div
@@ -249,7 +343,7 @@ const ConnectSection = () => {
                 </div>
 
                 <p className="text-[10px] text-muted-foreground/60 tracking-wider uppercase">
-                  ↻ Tap for stats
+                  ↻ Auto-flipping
                 </p>
               </div>
 
