@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Download } from "lucide-react";
 import profileImg from "@/assets/profile.jpg";
+import resumePdf from "@/assets/Adwait Reddy-Data_Analyst.pdf";
 
 const HeroSection = () => {
   return (
@@ -44,8 +45,8 @@ const HeroSection = () => {
             Accenture and UWA with strong communication and stakeholder-facing expertise.
           </p>
           <a
-            href="/Adwait_Reddy_Resume.pdf"
-            download
+            href={resumePdf}
+            download="Adwait Reddy-Data_Analyst.pdf"
             className="inline-flex items-center gap-3 px-6 py-3 rounded-full border border-primary/50 text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300 font-medium text-sm"
           >
             Download CV <Download size={16} />
