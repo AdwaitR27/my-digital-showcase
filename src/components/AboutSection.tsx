@@ -13,24 +13,30 @@ const AboutSection = () => {
         >
           <p className="text-primary text-sm tracking-[0.3em] uppercase mb-2">Data-Driven and Dedicated</p>
           <h2 className="font-display text-4xl md:text-6xl tracking-wider text-foreground mb-8">
-            Data & AI Analyst Ready to Make an Impact
+            Data and AI Analyst Ready to Make an Impact
           </h2>
+          <p className="text-primary text-sm tracking-[0.2em] uppercase mb-4">
+            I make the messy data appear meaningful.
+          </p>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-            <div className="text-muted-foreground leading-relaxed space-y-4 text-base md:text-lg">
-              <p>
-                I'm Adwait Reddy, a data professional based in Perth, Australia with a Master's in Data Science 
-                from the University of Western Australia. My journey spans consulting at Accenture, research at UWA, 
-                and AI/ML work at Norwood Systems.
+            <div className="group cursor-pointer space-y-4 text-sm md:text-base">
+              <p className="blur-sm group-hover:blur-none transition-all duration-500 text-muted-foreground leading-relaxed">
+                I am Adwait Reddy, a Data and AI professional based in Perth, Australia with a Masters in Data Science
+                from the University of Western Australia. My journey spans consulting at Accenture, research at UWA,
+                and AI/ML engineering at Norwood Systems.
               </p>
-              <p>
-                At Accenture, I designed 15+ Salesforce-integrated Power BI dashboards using DAX, reducing manual 
-                reporting effort by 40%. I developed complex SQL queries and ETL pipelines migrating thousands of 
-                records with less than 5% error rate.
+              <p className="blur-sm group-hover:blur-none transition-all duration-700 text-muted-foreground leading-relaxed">
+                At Accenture, I learned what it means to deliver under pressure. Building reporting solutions across
+                complex client environments and communicating data in ways that drive real decisions. When COVID hit,
+                I stepped up into a senior delivery role, coordinating end-to-end CI/CD releases across Dev, UAT, and
+                Production without ever compromising stability. Leading when the stakes were real earned me an early
+                promotion and shaped how I approach every challenge since.
               </p>
-              <p>
-                I'm passionate about translating complex data into actionable insights that drive real business 
-                decisions. Whether it's building real-time analytics platforms for emergency services or housing 
-                market dashboards, I bring analytical with AI experience and clear communication to every project.
+              <p className="blur-sm group-hover:blur-none transition-all duration-1000 text-muted-foreground leading-relaxed">
+                I dont believe datas job ends at the dashboard. I am passionate about pushing further, combining
+                deep analytics with AI and Machine Learning to build solutions that dont just describe the world,
+                but actively help navigate it. The future belongs to those who can bridge data and intelligence.
+                Thats exactly where I am headed.
               </p>
             </div>
             <div className="flex flex-col gap-6">
@@ -39,22 +45,25 @@ const AboutSection = () => {
                 <div className="space-y-3 text-sm">
                   <div>
                     <p className="text-foreground font-medium">MS. Data Science</p>
-                    <p className="text-muted-foreground">University of Western Australia · GPA: 5.9/7.0</p>
+                    <p className="text-muted-foreground">University of Western Australia - GPA: 5.9/7.0</p>
                   </div>
                   <div>
                     <p className="text-foreground font-medium">B.E. Mechanical Engineering</p>
-                    <p className="text-muted-foreground">RCOEM, India · CGPA: 8.13/10</p>
+                    <p className="text-muted-foreground">RCOEM, India - CGPA: 8.13/10</p>
                   </div>
                 </div>
               </div>
-              <a
-                href="https://www.linkedin.com/in/adwait-reddy-b60326250/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-3 text-primary hover:text-foreground transition-colors text-sm font-medium"
-              >
-                <ExternalLink size={18} /> LinkedIn Profile
-              </a>
+              
+              <div className="glass-card rounded-xl p-6">
+                <a
+                  href="https://www.linkedin.com/in/adwait-reddy-b60326250/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-3 text-primary hover:text-foreground transition-colors text-sm font-medium"
+                >
+                  <ExternalLink size={18} /> LinkedIn Profile
+                </a>
+              </div>
             </div>
           </div>
         </motion.div>

@@ -39,10 +39,11 @@ const HeroSection = () => {
           <p className="font-display text-lg md:text-xl tracking-[0.3em] text-primary mt-2 mb-6">
             DATA & AI ANALYST
           </p>
-          <p className="text-muted-foreground leading-relaxed max-w-lg mb-8 text-base md:text-lg">
-            Data professional with experience across consulting, research, analytics, and operations. 
-            Skilled in SQL, Power BI, Excel, and Python. Combines technical reporting experience from 
-            Accenture and UWA with strong communication and stakeholder-facing expertise.
+          <blockquote className="border-l-4 border-primary pl-4 italic text-muted-foreground mb-6 max-w-lg">
+            "Data is the fuel. AI is the engine. I work with both."
+          </blockquote>
+
+        <p className="text-muted-foreground leading-relaxed max-w-lg mb-8 text-sm md:text-base">   I don't just analyze data — I engineer intelligence from it. As a Data & AI professional with experience at Accenture and UWA, I work across the full stack: SQL, Python, Power BI, and beyond. I love digging deep into data, uncovering the story it tells — and then using AI to amplify those insights into smarter, real-world solutions. From crafting analytics that drive business decisions to exploring Machine Learning and LLM architectures, I bring both the rigour of a data analyst and the curiosity of an AI enthusiast. I'm not here to describe the past — I'm here to build what's next.
           </p>
           <a
             href={resumePdf}
