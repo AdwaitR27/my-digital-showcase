@@ -153,7 +153,7 @@ const ProjectsSection = () => {
             Data Analysis & Visualization
           </p>
           <h2 className="font-display text-4xl md:text-6xl tracking-wider text-foreground mb-4">
-            Portfolio
+            Data & AI Portfolio
           </h2>
           <p className="text-muted-foreground mb-12 max-w-2xl text-sm">
             Check out some of the projects and case studies I've worked on as a Data Analyst.
