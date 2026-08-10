@@ -3,6 +3,46 @@ import { ExternalLink } from "lucide-react";
 
 const projects = [
   {
+    title: "Ambulance Performance Analytics",
+    category: "Personal Project",
+    org: "St John WA · Jul 2026",
+    description:
+      "Built a 7-tab operational dashboard analysing 283K annual cases against a 90% contractual target, quantifying an 11.1pp performance shortfall and projecting it would not close until FY2027–28 at the current improvement rate. Covers executive summary, operational, financial and station coverage views.",
+    tags: ["Python", "Pandas", "Plotly", "Data Modeling", "Forecasting"],
+    links: [
+      {
+        label: "Live Dashboard",
+        url: "https://adwaitr27.github.io/St_johns_analyticss/",
+        icon: "external",
+      },
+      {
+        label: "GitHub",
+        url: "https://github.com/AdwaitR27/St_johns_analyticss",
+        icon: "github",
+      },
+    ],
+  },
+  {
+    title: "Australian Charity Sector Analytics",
+    category: "Personal Project",
+    org: "ACNC 2023 AIS Dataset · Perth, WA",
+    description:
+      "Built and deployed a hosted analytics application with its own ingestion pipeline, data model and interactive front end, profiling 50,754 records across 92 fields with type validation, null handling and outlier detection. Source code and dataset are published alongside it so the analysis is independently reproducible.",
+    tags: ["Python", "Pandas", "NumPy", "Plotly", "Data Profiling"],
+    links: [
+      {
+        label: "Live Dashboard",
+        url: "https://adwaitr27.github.io/Salvos_analytics/",
+        icon: "external",
+      },
+      {
+        label: "GitHub",
+        url: "https://github.com/AdwaitR27/Salvos_analytics",
+        icon: "github",
+      },
+    ],
+  },
+  {
     title: "Risk Analytics & Planning Platform",
     category: "Hackathon",
     org: "Dept. of Fire & Emergency Services (WA)",
